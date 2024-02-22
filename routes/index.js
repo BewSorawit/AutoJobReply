@@ -10,17 +10,28 @@ const Applicant = require('../models/Applicant');
 const storage = multer.memoryStorage();
 
 // Define the destination for the CV files
+// const cvDestination = (req, file, cb) => {
+//     const userId = req.body.email.replace('@', '_').replace('.', '_'); // Use email as a user identifier
+//     const userDir = path.join(__dirname, `../public/users/${userId}`);
+
+//     // Create the user directory if it doesn't exist
+//     if (!fs.existsSync(userDir)) {
+//         fs.mkdirSync(userDir);
+//     }
+
+//     cb(null, userDir);
+// };
+
 const cvDestination = (req, file, cb) => {
-    const userId = req.body.email.replace('@', '_').replace('.', '_'); // Use email as a user identifier
+    const userId = req.body.email.replace('@', '_').replace('.', '_');
     const userDir = path.join(__dirname, `../public/users/${userId}`);
 
-    // Create the user directory if it doesn't exist
-    if (!fs.existsSync(userDir)) {
-        fs.mkdirSync(userDir);
-    }
+    // Create the user directory and its parent directories if they don't exist
+    fs.mkdirSync(userDir, { recursive: true });
 
     cb(null, userDir);
 };
+
 
 const upload = multer({
     storage: multer.diskStorage({

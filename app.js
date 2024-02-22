@@ -12,8 +12,8 @@ if (!process.env.MONGODB_CONNECTION_URL) {
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGODB_CONNECTION_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
+    // useNewUrlParser: true,
+    // useUnifiedTopology: true,
 })
     .then(() => {
         console.log("Connected to MongoDB");

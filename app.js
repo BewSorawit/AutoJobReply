@@ -1,13 +1,27 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
+require('dotenv').config(); // Load environment variables from .env file
 const app = express();
 
+// Check if MongoDB connection URL is defined
+if (!process.env.MONGODB_CONNECTION_URL) {
+    console.error("Error: MongoDB connection URL is not defined. Make sure to set the MONGODB_CONNECTION_URL environment variable.");
+    process.exit(1); // Exit the application
+}
+
 // Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/interShip', {
+mongoose.connect(process.env.MONGODB_CONNECTION_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-});
+})
+    .then(() => {
+        console.log("Connected to MongoDB");
+    })
+    .catch((err) => {
+        console.error("MongoDB connection error:", err);
+        process.exit(1); // Exit the application in case of connection error
+    });
 
 // Set up view engine and static folder
 app.set('view engine', 'ejs');
@@ -24,7 +38,7 @@ app.get('/success-page', (req, res) => {
 });
 
 // Start server
-const port = 3000;
+const port = process.env.PORT
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });

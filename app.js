@@ -38,7 +38,7 @@ app.get('/success-page', (req, res) => {
 });
 
 // Start server
-const port = process.env.PORT
+const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });

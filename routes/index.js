@@ -20,7 +20,7 @@ const storage = multer.memoryStorage();
 // };
 const cvDestination = (req, file, cb) => {
   const usersDir = "/var/data/users";
-  const userId = req.body.email.replace("@", "_").replace(".", "_");
+  const userId = req.body.email;
   const userDir = path.join(usersDir, userId);
 
   // ตรวจสอบว่าโฟลเดอร์หลักมีอยู่แล้วหรือยัง ไม่มีก็สร้างมันก่อน

@@ -19,11 +19,19 @@ const storage = multer.memoryStorage();
 //   cb(null, userDir);
 // };
 const cvDestination = (req, file, cb) => {
+  const usersDir = "/var/data/users";
   const userId = req.body.email.replace("@", "_").replace(".", "_");
-  const userDir = path.join("/var/data/users", userId);
+  const userDir = path.join(usersDir, userId);
 
-  // สร้างไดเรกทอรีผู้ใช้และไดเรกทอรีพาเรนต์หากยังไม่มี
-  fs.mkdirSync(userDir, { recursive: true });
+  // ตรวจสอบว่าโฟลเดอร์หลักมีอยู่แล้วหรือยัง ไม่มีก็สร้างมันก่อน
+  if (!fs.existsSync(usersDir)) {
+    fs.mkdirSync(usersDir, { recursive: true });
+  }
+
+  // สร้างไดเรกทอรีผู้ใช้
+  if (!fs.existsSync(userDir)) {
+    fs.mkdirSync(userDir, { recursive: true });
+  }
 
   cb(null, userDir);
 };

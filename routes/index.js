@@ -7,35 +7,12 @@ const fs = require("fs");
 const Applicant = require("../models/Applicant");
 
 // Multer configuration for file upload
-const storage = multer.memoryStorage();
-
-// const cvDestination = (req, file, cb) => {
-//   const userId = req.body.email.replace("@", "_").replace(".", "_");
-//   const userDir = path.join(__dirname, `../public/users/${userId}`);
-
-//   // Create the user directory and its parent directories if they don't exist
-//   fs.mkdirSync(userDir, { recursive: true });
-
-//   cb(null, userDir);
-// };
-
 const cvDestination = (req, file, cb) => {
-  // ใช้เส้นทางภายในโปรเจกต์แทน
-  const usersDir = path.join(__dirname, "../uploads/users"); // หรือใช้ที่อยู่ที่คุณต้องการ
+  const usersDir = path.join(__dirname, `../public/users`);
   const userId = req.body.email;
   const userDir = path.join(usersDir, userId);
 
-  // สร้างไดเรกทอรีหลักถ้ายังไม่มี
-  if (!fs.existsSync(usersDir)) {
-    try {
-      fs.mkdirSync(usersDir, { recursive: true });
-    } catch (error) {
-      console.error(`Failed to create directory ${usersDir}:`, error);
-      return cb(error);
-    }
-  }
-
-  // สร้างไดเรกทอรีผู้ใช้ถ้ายังไม่มี
+  // Ensure the user directory exists
   if (!fs.existsSync(userDir)) {
     try {
       fs.mkdirSync(userDir, { recursive: true });
@@ -65,6 +42,7 @@ const upload = multer({
 router.get("/", (req, res) => {
   res.render("index.ejs");
 });
+
 // Change this route to handle the application form page
 router.get("/application-form", (req, res) => {
   res.render("applicationForm");
@@ -100,9 +78,15 @@ router.post(
         return;
       }
 
-      const userId = email.replace("@", "_").replace(".", "_");
+      // Create paths for saving uploaded files
+      const userId = email;
       const userDir = path.join(__dirname, `../public/users/${userId}`);
       const resumePath = path.join(userDir, resumeFile.filename);
+
+      // Ensure the user directory exists
+      if (!fs.existsSync(userDir)) {
+        fs.mkdirSync(userDir, { recursive: true });
+      }
 
       const applicant = new Applicant({
         name,

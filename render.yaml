@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: my-service
+    env: node
+    buildCommand: "npm install"
+    startCommand: "npm start"
+    disk:
+      name: my-persistent-disk
+      mountPath: /var/data

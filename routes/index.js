@@ -9,11 +9,20 @@ const Applicant = require("../models/Applicant");
 // Multer configuration for file upload
 const storage = multer.memoryStorage();
 
+// const cvDestination = (req, file, cb) => {
+//   const userId = req.body.email.replace("@", "_").replace(".", "_");
+//   const userDir = path.join(__dirname, `../public/users/${userId}`);
+
+//   // Create the user directory and its parent directories if they don't exist
+//   fs.mkdirSync(userDir, { recursive: true });
+
+//   cb(null, userDir);
+// };
 const cvDestination = (req, file, cb) => {
   const userId = req.body.email.replace("@", "_").replace(".", "_");
-  const userDir = path.join(__dirname, `../public/users/${userId}`);
+  const userDir = path.join("/var/data/users", userId);
 
-  // Create the user directory and its parent directories if they don't exist
+  // สร้างไดเรกทอรีผู้ใช้และไดเรกทอรีพาเรนต์หากยังไม่มี
   fs.mkdirSync(userDir, { recursive: true });
 
   cb(null, userDir);

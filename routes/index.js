@@ -18,12 +18,14 @@ const storage = multer.memoryStorage();
 
 //   cb(null, userDir);
 // };
+
 const cvDestination = (req, file, cb) => {
-  const usersDir = path.join(__dirname, "../data/users"); // Changed to use relative path within the project directory
-  const userId = req.body.email.replace("@", "_").replace(".", "_");
+  // ใช้เส้นทางภายในโปรเจกต์แทน
+  const usersDir = path.join(__dirname, "../uploads/users"); // หรือใช้ที่อยู่ที่คุณต้องการ
+  const userId = req.body.email;
   const userDir = path.join(usersDir, userId);
 
-  // Create main directory if it doesn't exist
+  // สร้างไดเรกทอรีหลักถ้ายังไม่มี
   if (!fs.existsSync(usersDir)) {
     try {
       fs.mkdirSync(usersDir, { recursive: true });
@@ -33,7 +35,7 @@ const cvDestination = (req, file, cb) => {
     }
   }
 
-  // Create user directory
+  // สร้างไดเรกทอรีผู้ใช้ถ้ายังไม่มี
   if (!fs.existsSync(userDir)) {
     try {
       fs.mkdirSync(userDir, { recursive: true });

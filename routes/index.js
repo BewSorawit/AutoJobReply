@@ -25,12 +25,22 @@ const cvDestination = (req, file, cb) => {
 
   // ตรวจสอบว่าโฟลเดอร์หลักมีอยู่แล้วหรือยัง ไม่มีก็สร้างมันก่อน
   if (!fs.existsSync(usersDir)) {
-    fs.mkdirSync(usersDir, { recursive: true });
+    try {
+      fs.mkdirSync(usersDir, { recursive: true });
+    } catch (error) {
+      console.error(`Failed to create directory ${usersDir}:`, error);
+      return cb(error);
+    }
   }
 
   // สร้างไดเรกทอรีผู้ใช้
   if (!fs.existsSync(userDir)) {
-    fs.mkdirSync(userDir, { recursive: true });
+    try {
+      fs.mkdirSync(userDir, { recursive: true });
+    } catch (error) {
+      console.error(`Failed to create user directory ${userDir}:`, error);
+      return cb(error);
+    }
   }
 
   cb(null, userDir);
